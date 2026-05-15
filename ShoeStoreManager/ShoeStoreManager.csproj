@@ -8,6 +8,15 @@
     <UseWPF>true</UseWPF>
   </PropertyGroup>
 
+<<<<<<< Updated upstream
+=======
+  <ItemGroup>
+    <PackageReference Include="MySql.Data" Version="9.7.0" />
+  </ItemGroup>
+
+
+
+>>>>>>> Stashed changes
   <ItemGroup>
     <None Update="Icon.ico">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
