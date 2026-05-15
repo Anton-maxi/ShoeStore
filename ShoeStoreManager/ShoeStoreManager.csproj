@@ -8,6 +8,8 @@
     <UseWPF>true</UseWPF>
   </PropertyGroup>
 
+
+
   <ItemGroup>
     <None Update="Icon.ico">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -15,3 +17,4 @@
   </ItemGroup>
 
 </Project>
+
