@@ -38,47 +38,29 @@ namespace ShoeStoreManager
             }
         }
 
+        private readonly ShoeStoreService _storeService = new ShoeStoreService();
+
         private void PerformLogin()
         {
             string username = LoginTextBox.Text.Trim();
             string password = PasswordBox.Password;
 
-            //Перевірка на порожні поля
             if (string.IsNullOrEmpty(username) || string.IsNullOrEmpty(password))
             {
                 MessageBox.Show("Будь ласка, заповніть усі поля!", "Попередження", MessageBoxButton.OK, MessageBoxImage.Warning);
                 return;
             }
 
-            string myConnectionString = "server=localhost;database=ShoeStore; uid=labuser;pwd=lab123;";
-
             try
             {
-                using (MySqlConnection conn = new MySqlConnection(myConnectionString))
+                if (_storeService.AuthenticateUser(username, password))
                 {
-                    conn.Open();
-
-                    string sql = "SELECT COUNT(*) FROM users WHERE login = @user AND password = @pass";
-
-                    using (MySqlCommand cmd = new MySqlCommand(sql, conn))
-                    {
-                        cmd.Parameters.AddWithValue("@user", username);
-                        cmd.Parameters.AddWithValue("@pass", password);
-
-                        //Отримуємо кількість знайдених рядків (буде 1, якщо користувач є, або 0, якщо немає)
-                        long userExists = (long)cmd.ExecuteScalar();
-
-                        if (userExists > 0)
-                        {
-                            //Закриваємо вікно авторизації після успішного входу
-                            this.DialogResult = true;
-                            this.Close();
-                        }
-                        else
-                        {
-                            MessageBox.Show("Неправильний логін або пароль.", "Помилка входу", MessageBoxButton.OK, MessageBoxImage.Error);
-                        }
-                    }
+                    this.DialogResult = true;
+                    this.Close();
+                }
+                else
+                {
+                    MessageBox.Show("Неправильний логін або пароль.", "Помилка входу", MessageBoxButton.OK, MessageBoxImage.Error);
                 }
             }
             catch (Exception ex)

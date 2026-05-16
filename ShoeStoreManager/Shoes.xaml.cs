@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -17,53 +18,22 @@ namespace ShoeStoreManager
             InitializeComponent();
         }
 
+        private readonly ShoeStoreService _storeService = new ShoeStoreService();
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            LoadData();
-        }
-
-        private void LoadData()
-        {
-            MySqlConnection myConnection;
-            string myConnectionString;
-
-            //Налаштування рядка підключення
-            myConnectionString = "server=localhost;database=ShoeStore; uid=labuser;pwd=lab123;";
-
             try
             {
-                myConnection = new MySqlConnection(myConnectionString);
-                myConnection.Open();
-
-                //Створюємо команду
-                MySqlCommand myCommand = new MySqlCommand();
-                myCommand.Connection = myConnection;
-                myCommand.CommandText = "SELECT * FROM shoe";
-
-                //Створюємо адаптер, який сам виконає команду та зчитує дані
-                MySqlDataAdapter myAdapter = new MySqlDataAdapter(myCommand);
-
-                //Створюємо віртуальну таблицю в пам'яті
-                DataTable dataTable = new DataTable();
-
-                //Заповнюємо таблицю даними з БД
-                myAdapter.Fill(dataTable);
-
-                //Передаємо ці дані у ваш DataGrid
-                ShoesDataGrid.ItemsSource = dataTable.DefaultView;
-
-
-                myConnection.Close();
-            }
-            catch (MySqlException ex)
-            {
-                MessageBox.Show($"Помилка бази даних: {ex.Message}", "Помилка", MessageBoxButton.OK, MessageBoxImage.Error);
+                // Викликаємо інкапсульований метод і передаємо дані в таблицю
+                DataTable shoesTable = _storeService.GetAllShoes();
+                ShoesDataGrid.ItemsSource = shoesTable.DefaultView;
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Загальна помилка: {ex.Message}", "Помилка", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show($"Помилка завантаження даних: {ex.Message}", "Помилка", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
+
+        
         private bool ExecuteDatabaseOperation(string query, params MySqlParameter[] parameters)
         {
             //Налаштування рядка підключення
@@ -94,56 +64,53 @@ namespace ShoeStoreManager
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            if (string.IsNullOrWhiteSpace(txtArticle.Text) || string.IsNullOrWhiteSpace(txtName.Text) ||
+            try {
+                if (string.IsNullOrWhiteSpace(txtArticle.Text) || string.IsNullOrWhiteSpace(txtName.Text) ||
                 string.IsNullOrWhiteSpace(txtCount.Text) || string.IsNullOrWhiteSpace(txtPrice.Text))
-            {
-                MessageBox.Show("Будь ласка, заповніть всі поля перед збереженням!", "Увага", MessageBoxButton.OK, MessageBoxImage.Warning);
-                return;
-            }
-
-            MySqlParameter[] parameters = new MySqlParameter[]
-            {
-                new MySqlParameter("@article", txtArticle.Text),
-                new MySqlParameter("@name", txtName.Text),
-                new MySqlParameter("@count", txtCount.Text),
-                new MySqlParameter("@price", txtPrice.Text.Replace(',', '.'))
-            };
-
-            bool isUpdate = false;
-            string myConnectionString = "server=localhost;database=ShoeStore; uid=labuser;pwd=lab123;";
-            using (MySqlConnection myConnection = new MySqlConnection(myConnectionString))
-            {
-                myConnection.Open();
-                using (MySqlCommand checkCmd = new MySqlCommand("SELECT COUNT(*) FROM shoe WHERE item_number = @article", myConnection))
                 {
-                    checkCmd.Parameters.AddWithValue("@article", txtArticle.Text);
-                    int count = Convert.ToInt32(checkCmd.ExecuteScalar());
-                    isUpdate = (count > 0);
+                    MessageBox.Show("Будь ласка, заповніть всі поля перед збереженням!", "Увага", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    return;
                 }
-            }
+                //Безпечна конвертація кількості
+                if (!int.TryParse(txtCount.Text.Trim(), out int count))
+                {
+                    MessageBox.Show("Поле 'Кількість' повинно містити лише цілі числа!", "Помилка введення", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    txtCount.Focus();
+                    return;
+                }
 
-            string query;
-            if (isUpdate)
-            {
-                query = "UPDATE shoe SET name = @name, count = @count, price_one_pair = @price WHERE item_number = @article";
-            }
-            else
-            {
-                query = "INSERT INTO shoe (item_number, name, count, price_one_pair) VALUES (@article, @name, @count, @price)";
-            }
+                //Безпечна конвертація ціни (робимо так, щоб приймало і крапку, і кому)
+                string priceInput = txtPrice.Text.Trim().Replace(',', '.');
+                if (!decimal.TryParse(priceInput, NumberStyles.Any, CultureInfo.InvariantCulture, out decimal price))
+                {
+                    MessageBox.Show("Поле 'Вартість' введено некоректно! Використовуйте формат на зразок: 150.50", "Помилка введення", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    txtPrice.Focus();
+                    return;
+                }
 
-            bool isSuccess = ExecuteDatabaseOperation(query, parameters);
-
-            if (isSuccess)
-            {
-                string message = isUpdate ? "Дані моделі успішно оновлено!" : "Нову модель успішно додано!";
-                MessageBox.Show(message, "Успіх", MessageBoxButton.OK, MessageBoxImage.Information);
-                LoadData();
-
-                if (!isUpdate)
+                Shoe currentShoe = new Shoe(
+                    txtArticle.Text.Trim(),
+                    txtName.Text.Trim(),
+                    count,
+                    price
+                );
+                bool flag_for_ClearInputFields =_storeService.SaveShoe(currentShoe);
+                ShoesDataGrid.ItemsSource = _storeService.GetAllShoes().DefaultView;
+                if (!flag_for_ClearInputFields)
                 {
                     ClearInputFields();
                 }
+
+            }
+            catch (ArgumentException ex)
+            {
+                // Сюди прилетить помилка, якщо користувач ввів некоректні дані (наприклад, ціну -50)
+                MessageBox.Show(ex.Message, "Увага (Валідація)", MessageBoxButton.OK, MessageBoxImage.Warning);
+            }
+            catch (Exception ex)
+            {
+                // Сюди прилетять помилки конвертації або проблеми з самою БД (try-catch, як ви і хотіли)
+                MessageBox.Show($"Помилка: {ex.Message}", "Помилка виконання", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 
@@ -184,6 +151,7 @@ namespace ShoeStoreManager
             if (ShoesDataGrid.SelectedItem is DataRowView selectedRow)
             {
                 txtArticle.Text = selectedRow["item_number"].ToString();
+                txtArticle.IsEnabled = false;
                 txtName.Text = selectedRow["name"].ToString();
                 txtCount.Text = selectedRow["count"].ToString();
                 txtPrice.Text = selectedRow["price_one_pair"].ToString();
@@ -196,6 +164,7 @@ namespace ShoeStoreManager
 
         private void ClearInputFields()
         {
+            txtArticle.IsEnabled = true;
             txtArticle.Clear();
             txtName.Clear();
             txtCount.Clear();

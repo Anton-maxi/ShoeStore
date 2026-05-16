@@ -11,48 +11,22 @@ namespace ShoeStoreManager
         {
             InitializeComponent();
         }
+        private readonly ShoeStoreService _storeService = new ShoeStoreService();
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            MySqlConnection myConnection;
-            string myConnectionString;
-
-            // Налаштування рядка підключення
-            myConnectionString = "server=localhost;database=ShoeStore; uid=labuser;pwd=lab123;";
-
             try
             {
-                myConnection = new MySqlConnection(myConnectionString);
-                myConnection.Open();
-
-                //Створюємо команду
-                MySqlCommand myCommand = new MySqlCommand();
-                myCommand.Connection = myConnection;
-                myCommand.CommandText = "SELECT * FROM shoe";
-
-                //Cтворюємо адаптер, який сам виконає команду та зчитує дані
-                MySqlDataAdapter myAdapter = new MySqlDataAdapter(myCommand);
-
-                //Створюємо віртуальну таблицю в пам'яті
-                DataTable dataTable = new DataTable();
-
-                //Заповнюємо таблицю даними з БД
-                myAdapter.Fill(dataTable);
-
-                //Передаємо ці дані у ваш DataGrid
-                ShoesDataGrid.ItemsSource = dataTable.DefaultView;
-
-                myConnection.Close();
-            }
-            catch (MySqlException ex)
-            {
-                MessageBox.Show($"Помилка бази даних: {ex.Message}", "Помилка", MessageBoxButton.OK, MessageBoxImage.Error);
+                // Викликаємо інкапсульований метод і передаємо дані в таблицю
+                DataTable shoesTable = _storeService.GetAllShoes();
+                ShoesDataGrid.ItemsSource = shoesTable.DefaultView;
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Загальна помилка: {ex.Message}", "Помилка", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show($"Помилка завантаження даних: {ex.Message}", "Помилка", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
+
         private void AuthMenuItem_Click(object sender, RoutedEventArgs e)
         {
             LoginForm authWindow = new LoginForm();
