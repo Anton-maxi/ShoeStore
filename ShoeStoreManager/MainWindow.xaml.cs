@@ -12,35 +12,6 @@ namespace ShoeStoreManager
             InitializeComponent();
         }
 
-
-namespace ShoeStoreManager
-{
-    /// <summary>
-    /// Interaction logic for LoginForm.xaml
-    /// </summary>
-    public partial class MainWindow : Window
-    {
-
-        public MainWindow()
-        {
-            InitializeComponent();
-        }
-
-        private void MainWindow_Load(object sender, EventArgs e)
-=========
-                myCommand.CommandText = "SELECT * FROM shoe";
-using System.Windows;
-
-namespace ShoeStoreManager
-{
-    public partial class MainWindow : Window
-    {
-        public MainWindow()
-        {
-            InitializeComponent(); // Залишаємо лише це, ніяких ручних створення DataGrid!
-        }
-
-        // Цей метод автоматично спрацює при відкритті вікна
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             MySqlConnection myConnection;
@@ -57,11 +28,7 @@ namespace ShoeStoreManager
                 //Створюємо команду
                 MySqlCommand myCommand = new MySqlCommand();
                 myCommand.Connection = myConnection;
-            // Якщо авторизація пройшла успішно (ввели правильний логін і пароль)
-            if (authWindow.ShowDialog() == true)
-            {
-                // 1. Створюємо нове вікно Shoes
-                Shoes shoesWindow = new Shoes();
+                myCommand.CommandText = "SELECT * FROM shoe";
 
                 //Cтворюємо адаптер, який сам виконає команду та зчитує дані
                 MySqlDataAdapter myAdapter = new MySqlDataAdapter(myCommand);
