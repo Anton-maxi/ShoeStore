@@ -1,6 +1,6 @@
 ﻿using MySql.Data.MySqlClient;
 using System;
-using System.Data; // Обов'язково для роботи з DataTable
+using System.Data; //Обов'язково для роботи з DataTable
 using System.Windows;
 
 namespace ShoeStoreManager
@@ -53,9 +53,9 @@ namespace ShoeStoreManager
             {
                 myConnection = new MySqlConnection(myConnectionString);
                 myConnection.Open();
-        private void AuthMenuItem_Click(object sender, RoutedEventArgs e)
-        {
-            LoginForm authWindow = new LoginForm();
+
+                //Створюємо команду
+                MySqlCommand myCommand = new MySqlCommand();
                 myCommand.Connection = myConnection;
             // Якщо авторизація пройшла успішно (ввели правильний логін і пароль)
             if (authWindow.ShowDialog() == true)
@@ -63,15 +63,16 @@ namespace ShoeStoreManager
                 // 1. Створюємо нове вікно Shoes
                 Shoes shoesWindow = new Shoes();
 
-                // 2. Відкриваємо його
-                shoesWindow.Show();
+                //Cтворюємо адаптер, який сам виконає команду та зчитує дані
                 MySqlDataAdapter myAdapter = new MySqlDataAdapter(myCommand);
-                // 3. Закриваємо поточне вікно (MainWindow), щоб воно не висіло на фоні
-                this.Close();
-            }
-        }
-    }
-}                // Передаємо ці дані у ваш DataGrid (який в MainWindow.xaml має назву x:Name="ShoesDataGrid")
+
+                //Створюємо віртуальну таблицю в пам'яті
+                DataTable dataTable = new DataTable();
+
+                //Заповнюємо таблицю даними з БД
+                myAdapter.Fill(dataTable);
+
+                //Передаємо ці дані у ваш DataGrid
                 ShoesDataGrid.ItemsSource = dataTable.DefaultView;
 
                 myConnection.Close();
@@ -89,14 +90,18 @@ namespace ShoeStoreManager
         {
             LoginForm authWindow = new LoginForm();
 
-        private void MenuItem_Click(object sender, RoutedEventArgs e)
->>>>>>>>> Temporary merge branch 2
-        {
+            //Якщо авторизація пройшла успішно (ввели правильний логін і пароль)
+            if (authWindow.ShowDialog() == true)
+            {
+                //Створюємо нове вікно Shoes
+                Shoes shoesWindow = new Shoes();
 
+                //Відкриваємо його
+                shoesWindow.Show();
+
+                //Закриваємо поточне вікно (MainWindow), щоб воно не висіло на фоні
+                this.Close();
+            }
         }
     }
-<<<<<<<<< Temporary merge branch 1
 }
-=========
-}
->>>>>>>>> Temporary merge branch 2

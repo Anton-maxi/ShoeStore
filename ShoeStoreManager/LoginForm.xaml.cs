@@ -41,9 +41,9 @@ namespace ShoeStoreManager
         private void PerformLogin()
         {
             string username = LoginTextBox.Text.Trim();
-            string password = PasswordBox.Password; // У PasswordBox використовується .Password, а не .Text
+            string password = PasswordBox.Password;
 
-            // Перевірка на порожні поля
+            //Перевірка на порожні поля
             if (string.IsNullOrEmpty(username) || string.IsNullOrEmpty(password))
             {
                 MessageBox.Show("Будь ласка, заповніть усі поля!", "Попередження", MessageBoxButton.OK, MessageBoxImage.Warning);
@@ -58,12 +58,10 @@ namespace ShoeStoreManager
                 {
                     conn.Open();
 
-                    // Запит, який шукає користувача з таким логіном та паролем
                     string sql = "SELECT COUNT(*) FROM users WHERE login = @user AND password = @pass";
 
                     using (MySqlCommand cmd = new MySqlCommand(sql, conn))
                     {
-                        // Використовуємо параметри для захисту від SQL-ін'єкцій
                         cmd.Parameters.AddWithValue("@user", username);
                         cmd.Parameters.AddWithValue("@pass", password);
 
