@@ -19,7 +19,7 @@ namespace ShoeStoreManager
             string myConnectionString;
 
             // Налаштування рядка підключення
-            myConnectionString = "server=127.0.0.1;uid=root;pwd=hoNKyeC6zp6lw5PZ4;database=ShoeStore";
+            myConnectionString = "server=localhost;database=ShoeStore; uid=labuser;pwd=lab123;";
 
             try
             {
@@ -60,4 +60,3 @@ namespace ShoeStoreManager
         }
     }
 }
-// лох їбучій
