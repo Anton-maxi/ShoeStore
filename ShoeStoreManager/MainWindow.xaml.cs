@@ -9,10 +9,9 @@ namespace ShoeStoreManager
     {
         public MainWindow()
         {
-            InitializeComponent(); // Залишаємо лише це, ніяких ручних створення DataGrid!
+            InitializeComponent();
         }
 
-        // Цей метод автоматично спрацює при відкритті вікна
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             MySqlConnection myConnection;
@@ -29,9 +28,7 @@ namespace ShoeStoreManager
                 // Створюємо команду
                 MySqlCommand myCommand = new MySqlCommand();
                 myCommand.Connection = myConnection;
-                myCommand.CommandText = "SELECT * FROM shoe"; // Переконайтеся, що в БД назва з маленької або великої літери (shoe/Shoe)
-
-                // --- ОНОВЛЕНИЙ ТА ПРАВИЛЬНИЙ ШЛЯХ ВИВЕДЕННЯ ДАНИХ ---
+                myCommand.CommandText = "SELECT * FROM shoe";
 
                 // Створюємо адаптер, який сам виконає команду та зчитує дані
                 MySqlDataAdapter myAdapter = new MySqlDataAdapter(myCommand);
@@ -44,8 +41,6 @@ namespace ShoeStoreManager
 
                 // Передаємо ці дані у ваш DataGrid (який в MainWindow.xaml має назву x:Name="ShoesDataGrid")
                 ShoesDataGrid.ItemsSource = dataTable.DefaultView;
-
-                // --------------------------------------------------
 
                 myConnection.Close();
             }
