@@ -18,8 +18,7 @@
 
         <Menu Grid.Row="0" Background="#C1D1E8" Padding="0,5,0,5" Margin="0,0,0,36">
             <MenuItem Header="Файл" Width="200" HorizontalContentAlignment="Center">
-                <MenuItem Header="Завантажити дані" />
-                <MenuItem Header="Зберегти зміни" />
+                <MenuItem Header="Зберегти та Завантажити файл" />
             </MenuItem>
 
             <MenuItem Header="Товари" Width="375" HorizontalContentAlignment="Center">
