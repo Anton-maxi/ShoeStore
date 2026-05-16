@@ -16,7 +16,13 @@ namespace ShoeStoreManager
         {
             InitializeComponent();
         }
+
         private void Window_Loaded(object sender, RoutedEventArgs e)
+        {
+            LoadData();
+        }
+
+        private void LoadData()
         {
             MySqlConnection myConnection;
             string myConnectionString;
@@ -45,7 +51,7 @@ namespace ShoeStoreManager
 
                 //Передаємо ці дані у ваш DataGrid
                 ShoesDataGrid.ItemsSource = dataTable.DefaultView;
- 
+
 
                 myConnection.Close();
             }
@@ -58,38 +64,13 @@ namespace ShoeStoreManager
                 MessageBox.Show($"Загальна помилка: {ex.Message}", "Помилка", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
-
-        private void Window_Loaded(object sender, RoutedEventArgs e)
-        {
-            LoadData();
-        }
-
-        private void LoadData()
-        {
-            try
-            {
-                using (MySqlConnection myConnection = new MySqlConnection(connectionString))
-                {
-                    myConnection.Open();
-                    using (MySqlCommand myCommand = new MySqlCommand("SELECT * FROM shoe", myConnection))
-                    {
-                        MySqlDataAdapter myAdapter = new MySqlDataAdapter(myCommand);
-                        DataTable dataTable = new DataTable();
-                        myAdapter.Fill(dataTable);
-                        ShoesDataGrid.ItemsSource = dataTable.DefaultView;
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"Помилка завантаження даних: {ex.Message}", "Помилка", MessageBoxButton.OK, MessageBoxImage.Error);
-            }
-        }
         private bool ExecuteDatabaseOperation(string query, params MySqlParameter[] parameters)
         {
+            //Налаштування рядка підключення
+            string myConnectionString = "server=localhost;database=ShoeStore; uid=labuser;pwd=lab123;";
             try
             {
-                using (MySqlConnection myConnection = new MySqlConnection(connectionString))
+                using (MySqlConnection myConnection = new MySqlConnection(myConnectionString))
                 {
                     myConnection.Open();
                     using (MySqlCommand myCommand = new MySqlCommand(query, myConnection))
@@ -129,7 +110,8 @@ namespace ShoeStoreManager
             };
 
             bool isUpdate = false;
-            using (MySqlConnection myConnection = new MySqlConnection(connectionString))
+            string myConnectionString = "server=localhost;database=ShoeStore; uid=labuser;pwd=lab123;";
+            using (MySqlConnection myConnection = new MySqlConnection(myConnectionString))
             {
                 myConnection.Open();
                 using (MySqlCommand checkCmd = new MySqlCommand("SELECT COUNT(*) FROM shoe WHERE item_number = @article", myConnection))
