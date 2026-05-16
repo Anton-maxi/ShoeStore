@@ -21,8 +21,6 @@ namespace ShoeStoreManager
     /// </summary>
     public partial class Shoes : Window
     {
-
-
         public Shoes()
         {
             InitializeComponent();
@@ -32,7 +30,7 @@ namespace ShoeStoreManager
             MySqlConnection myConnection;
             string myConnectionString;
 
-            // Налаштування рядка підключення
+            //Налаштування рядка підключення
             myConnectionString = "server=localhost;database=ShoeStore; uid=labuser;pwd=lab123;";
 
             try
@@ -40,23 +38,21 @@ namespace ShoeStoreManager
                 myConnection = new MySqlConnection(myConnectionString);
                 myConnection.Open();
 
-                // Створюємо команду
+                //Створюємо команду
                 MySqlCommand myCommand = new MySqlCommand();
                 myCommand.Connection = myConnection;
                 myCommand.CommandText = "SELECT * FROM shoe";
 
-                //ОНОВЛЕНИЙ ТА ПРАВИЛЬНИЙ ШЛЯХ ВИВЕДЕННЯ ДАНИХ
-
-                // Створюємо адаптер, який сам виконає команду та зчитує дані
+                //Створюємо адаптер, який сам виконає команду та зчитує дані
                 MySqlDataAdapter myAdapter = new MySqlDataAdapter(myCommand);
 
-                // Створюємо віртуальну таблицю в пам'яті
+                //Створюємо віртуальну таблицю в пам'яті
                 DataTable dataTable = new DataTable();
 
-                // Заповнюємо таблицю даними з БД
+                //Заповнюємо таблицю даними з БД
                 myAdapter.Fill(dataTable);
 
-                // Передаємо ці дані у ваш DataGrid (який в MainWindow.xaml має назву x:Name="ShoesDataGrid")
+                //Передаємо ці дані у ваш DataGrid
                 ShoesDataGrid.ItemsSource = dataTable.DefaultView;
  
 

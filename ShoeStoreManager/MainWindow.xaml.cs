@@ -1,6 +1,6 @@
 ﻿using MySql.Data.MySqlClient;
 using System;
-using System.Data; // Обов'язково для роботи з DataTable
+using System.Data; //Обов'язково для роботи з DataTable
 using System.Windows;
 
 namespace ShoeStoreManager
@@ -25,21 +25,21 @@ namespace ShoeStoreManager
                 myConnection = new MySqlConnection(myConnectionString);
                 myConnection.Open();
 
-                // Створюємо команду
+                //Створюємо команду
                 MySqlCommand myCommand = new MySqlCommand();
                 myCommand.Connection = myConnection;
                 myCommand.CommandText = "SELECT * FROM shoe";
 
-                // Створюємо адаптер, який сам виконає команду та зчитує дані
+                //Cтворюємо адаптер, який сам виконає команду та зчитує дані
                 MySqlDataAdapter myAdapter = new MySqlDataAdapter(myCommand);
 
-                // Створюємо віртуальну таблицю в пам'яті
+                //Створюємо віртуальну таблицю в пам'яті
                 DataTable dataTable = new DataTable();
 
-                // Заповнюємо таблицю даними з БД
+                //Заповнюємо таблицю даними з БД
                 myAdapter.Fill(dataTable);
 
-                // Передаємо ці дані у ваш DataGrid (який в MainWindow.xaml має назву x:Name="ShoesDataGrid")
+                //Передаємо ці дані у ваш DataGrid
                 ShoesDataGrid.ItemsSource = dataTable.DefaultView;
 
                 myConnection.Close();
@@ -57,16 +57,16 @@ namespace ShoeStoreManager
         {
             LoginForm authWindow = new LoginForm();
 
-            // Якщо авторизація пройшла успішно (ввели правильний логін і пароль)
+            //Якщо авторизація пройшла успішно (ввели правильний логін і пароль)
             if (authWindow.ShowDialog() == true)
             {
-                // 1. Створюємо нове вікно Shoes
+                //Створюємо нове вікно Shoes
                 Shoes shoesWindow = new Shoes();
 
-                // 2. Відкриваємо його
+                //Відкриваємо його
                 shoesWindow.Show();
 
-                // 3. Закриваємо поточне вікно (MainWindow), щоб воно не висіло на фоні
+                //Закриваємо поточне вікно (MainWindow), щоб воно не висіло на фоні
                 this.Close();
             }
         }
