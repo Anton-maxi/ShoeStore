@@ -2,7 +2,7 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="Взуття" Height="450" Width="800"
-        Background="#E2EAF4">
+        Background="#E2EAF4" Loaded="Window_Loaded">
 
     <Grid>
         <Grid.ColumnDefinitions>
@@ -16,8 +16,7 @@
 
         <Menu Grid.Row="0" Background="#C1D1E8" Padding="0,5,0,5" Grid.ColumnSpan="2" Margin="0,0,0,36">
             <MenuItem Header="Файл" Width="165" HorizontalContentAlignment="Center">
-                <MenuItem Header="Завантажити дані" />
-                <MenuItem Header="Зберегти зміни" />
+                <MenuItem Header="Зберегти та Завантажити файл" />
             </MenuItem>
 
             <MenuItem Header="Модель" Width="401" HorizontalContentAlignment="Center">
@@ -35,20 +34,31 @@
                 <ColumnDefinition Width="220"/>
             </Grid.ColumnDefinitions>
 
-            <DataGrid Grid.Column="0" AutoGenerateColumns="False" 
+            <DataGrid x:Name="ShoesDataGrid" Grid.Column="0" AutoGenerateColumns="False" 
                       Background="White" RowBackground="White" AlternatingRowBackground="#F0F5FA" 
                       HeadersVisibility="Column" BorderBrush="#9CB6D9" BorderThickness="1">
+
+                <DataGrid.ContextMenu>
+                    <ContextMenu>
+                        <MenuItem Header="Додати" Click="AddMenuItem_Click"/>
+                        <MenuItem Header="Редагувати" Click="EditMenuItem_Click"/>
+                        <Separator/>
+                        <MenuItem Header="Видалити" Click="DeleteMenuItem_Click"/>
+                    </ContextMenu>
+                </DataGrid.ContextMenu>
+
                 <DataGrid.Columns>
-                    <DataGridTextColumn Header="Артикул" Width="70"/>
-                    <DataGridTextColumn Header="Назва моделі" Width="*"/>
-                    <DataGridTextColumn Header="Кількість" Width="70"/>
-                    <DataGridTextColumn Header="Вартість" Width="70"/>
+                    <DataGridTextColumn Header="Артикул" Width="70" Binding="{Binding item_number}"/>
+                    <DataGridTextColumn Header="Назва моделі" Width="*" Binding="{Binding name}"/>
+                    <DataGridTextColumn Header="Кількість" Width="70" Binding="{Binding count}"/>
+                    <DataGridTextColumn Header="Вартість" Width="70" Binding="{Binding price_one_pair}"/>
                 </DataGrid.Columns>
             </DataGrid>
 
             <StackPanel Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Center">
 
                 <TextBlock Text="Додавання&#x0a;моделі" TextAlignment="Center" FontSize="11" Margin="0,0,0,5" Foreground="#1D2A3A"/>
+
                 <Button Content="+" FontSize="24" FontWeight="Bold" Width="40" Height="40" Background="#E2EAF4" BorderBrush="#9CB6D9" BorderThickness="2" Foreground="#1D2A3A" Margin="0,0,0,10" Click="Button_Click_1">
                     <Button.Resources>
                         <Style TargetType="{x:Type Border}">
@@ -56,7 +66,8 @@
                         </Style>
                     </Button.Resources>
                 </Button>
-                <Button Content="✎" FontSize="20" Width="40" Height="40" Background="#E2EAF4" BorderBrush="#9CB6D9" BorderThickness="2" Foreground="#1D2A3A">
+
+                <Button Content="✎" FontSize="20" Width="40" Height="40" Background="#E2EAF4" BorderBrush="#9CB6D9" BorderThickness="2" Foreground="#1D2A3A" Click="EditButton_Click">
                     <Button.Resources>
                         <Style TargetType="{x:Type Border}">
                             <Setter Property="CornerRadius" Value="20"/>
@@ -75,10 +86,10 @@
                         <TextBlock Text="Модель" FontWeight="Bold" FontSize="16" HorizontalAlignment="Center" Foreground="#1D2A3A"/>
                     </Border>
 
-                    <TextBox Text="Артикул" Height="28" Margin="0,0,0,10" VerticalContentAlignment="Center" HorizontalContentAlignment="Center"/>
-                    <TextBox Text="Назва моделі" Height="28" Margin="0,0,0,10" VerticalContentAlignment="Center" HorizontalContentAlignment="Center"/>
-                    <TextBox Text="Кількість пар" Height="28" Margin="0,0,0,10" VerticalContentAlignment="Center" HorizontalContentAlignment="Center"/>
-                    <TextBox Text="Вартість за пару" Height="28" Margin="0,0,0,15" VerticalContentAlignment="Center" HorizontalContentAlignment="Center"/>
+                    <TextBox x:Name="txtArticle" Height="28" Margin="0,0,0,10" VerticalContentAlignment="Center" HorizontalContentAlignment="Center"/>
+                    <TextBox x:Name="txtName" Height="28" Margin="0,0,0,10" VerticalContentAlignment="Center" HorizontalContentAlignment="Center"/>
+                    <TextBox x:Name="txtCount" Height="28" Margin="0,0,0,10" VerticalContentAlignment="Center" HorizontalContentAlignment="Center"/>
+                    <TextBox x:Name="txtPrice" Height="28" Margin="0,0,0,15" VerticalContentAlignment="Center" HorizontalContentAlignment="Center"/>
 
                     <Button Content="Зберегти" Height="32" Background="#00478E" Foreground="White" FontWeight="Bold" Click="Button_Click">
                         <Button.Resources>
