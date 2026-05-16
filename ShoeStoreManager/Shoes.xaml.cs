@@ -33,34 +33,6 @@ namespace ShoeStoreManager
             }
         }
 
-        
-        private bool ExecuteDatabaseOperation(string query, params MySqlParameter[] parameters)
-        {
-            //Налаштування рядка підключення
-            string myConnectionString = "server=localhost;database=ShoeStore; uid=labuser;pwd=lab123;";
-            try
-            {
-                using (MySqlConnection myConnection = new MySqlConnection(myConnectionString))
-                {
-                    myConnection.Open();
-                    using (MySqlCommand myCommand = new MySqlCommand(query, myConnection))
-                    {
-                        if (parameters != null)
-                        {
-                            myCommand.Parameters.AddRange(parameters);
-                        }
-
-                        int affectedRows = myCommand.ExecuteNonQuery();
-                        return affectedRows > 0;
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"Помилка бази даних: {ex.Message}", "Помилка", MessageBoxButton.OK, MessageBoxImage.Error);
-                return false;
-            }
-        }
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
