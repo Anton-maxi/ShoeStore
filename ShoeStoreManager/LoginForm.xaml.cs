@@ -65,12 +65,12 @@ namespace ShoeStoreManager
                         cmd.Parameters.AddWithValue("@user", username);
                         cmd.Parameters.AddWithValue("@pass", password);
 
-                        // Отримуємо кількість знайдених рядків (буде 1, якщо користувач є, або 0, якщо немає)
+                        //Отримуємо кількість знайдених рядків (буде 1, якщо користувач є, або 0, якщо немає)
                         long userExists = (long)cmd.ExecuteScalar();
 
                         if (userExists > 0)
                         {
-                            // Закриваємо вікно авторизації після успішного входу
+                            //Закриваємо вікно авторизації після успішного входу
                             this.DialogResult = true;
                             this.Close();
                         }
