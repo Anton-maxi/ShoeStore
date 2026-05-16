@@ -24,9 +24,37 @@ namespace ShoeStoreManager
             InitializeComponent();
         }
 
+        private void LoginButton_Click(object sender, RoutedEventArgs e)
+        {
+            PerformLogin();
+        }
+
+        private void Window_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+            {
+                PerformLogin();
+            }
+        }
+
+        private void PerformLogin()
+        {
+            if (LoginTextBox.Text == "Редактор" && PasswordBox.Password == "222")
+            {
+                this.DialogResult = true;
+                this.Close();
+            }
+            else
+            {
+                MessageBox.Show("Невірно введений логін або пароль!", "Помилка", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
         private void CancelButton_Click(object sender, RoutedEventArgs e)
         {
-
+            this.DialogResult = false;
+            this.Close();
         }
+
     }
 }

@@ -25,7 +25,7 @@
                 <MenuItem Header="Редагувати модель" />
             </MenuItem>
 
-            <MenuItem Header="Авторизація" Width="180" HorizontalContentAlignment="Center"/>
+            <MenuItem Header="Вихід" Width="180" HorizontalContentAlignment="Center" Click="BackToMain_Click"/>
         </Menu>
 
         <Grid Margin="10,38,10,10" Grid.ColumnSpan="2" Grid.RowSpan="2">

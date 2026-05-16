@@ -58,10 +58,22 @@ namespace ShoeStoreManager
                 MessageBox.Show($"Загальна помилка: {ex.Message}", "Помилка", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
-
-        private void MenuItem_Click(object sender, RoutedEventArgs e)
+        private void AuthMenuItem_Click(object sender, RoutedEventArgs e)
         {
+            LoginForm authWindow = new LoginForm();
 
+            // Якщо авторизація пройшла успішно (ввели правильний логін і пароль)
+            if (authWindow.ShowDialog() == true)
+            {
+                // 1. Створюємо нове вікно Shoes
+                Shoes shoesWindow = new Shoes();
+
+                // 2. Відкриваємо його
+                shoesWindow.Show();
+
+                // 3. Закриваємо поточне вікно (MainWindow), щоб воно не висіло на фоні
+                this.Close();
+            }
         }
     }
 }
