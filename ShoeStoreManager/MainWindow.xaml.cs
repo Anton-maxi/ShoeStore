@@ -9,6 +9,34 @@ namespace ShoeStoreManager
     {
         public MainWindow()
         {
+            InitializeComponent();
+        }
+
+
+namespace ShoeStoreManager
+{
+    /// <summary>
+    /// Interaction logic for LoginForm.xaml
+    /// </summary>
+    public partial class MainWindow : Window
+    {
+
+        public MainWindow()
+        {
+            InitializeComponent();
+        }
+
+        private void MainWindow_Load(object sender, EventArgs e)
+=========
+                myCommand.CommandText = "SELECT * FROM shoe";
+using System.Windows;
+
+namespace ShoeStoreManager
+{
+    public partial class MainWindow : Window
+    {
+        public MainWindow()
+        {
             InitializeComponent(); // Залишаємо лише це, ніяких ручних створення DataGrid!
         }
 
@@ -25,27 +53,26 @@ namespace ShoeStoreManager
             {
                 myConnection = new MySqlConnection(myConnectionString);
                 myConnection.Open();
-
-                // Створюємо команду
-                MySqlCommand myCommand = new MySqlCommand();
+        private void AuthMenuItem_Click(object sender, RoutedEventArgs e)
+        {
+            LoginForm authWindow = new LoginForm();
                 myCommand.Connection = myConnection;
-                myCommand.CommandText = "SELECT * FROM shoe"; // Переконайтеся, що в БД назва з маленької або великої літери (shoe/Shoe)
+            // Якщо авторизація пройшла успішно (ввели правильний логін і пароль)
+            if (authWindow.ShowDialog() == true)
+            {
+                // 1. Створюємо нове вікно Shoes
+                Shoes shoesWindow = new Shoes();
 
-                // --- ОНОВЛЕНИЙ ТА ПРАВИЛЬНИЙ ШЛЯХ ВИВЕДЕННЯ ДАНИХ ---
-
-                // Створюємо адаптер, який сам виконає команду та зчитує дані
+                // 2. Відкриваємо його
+                shoesWindow.Show();
                 MySqlDataAdapter myAdapter = new MySqlDataAdapter(myCommand);
-
-                // Створюємо віртуальну таблицю в пам'яті
-                DataTable dataTable = new DataTable();
-
-                // Заповнюємо таблицю даними з БД
-                myAdapter.Fill(dataTable);
-
-                // Передаємо ці дані у ваш DataGrid (який в MainWindow.xaml має назву x:Name="ShoesDataGrid")
+                // 3. Закриваємо поточне вікно (MainWindow), щоб воно не висіло на фоні
+                this.Close();
+            }
+        }
+    }
+}                // Передаємо ці дані у ваш DataGrid (який в MainWindow.xaml має назву x:Name="ShoesDataGrid")
                 ShoesDataGrid.ItemsSource = dataTable.DefaultView;
-
-                // --------------------------------------------------
 
                 myConnection.Close();
             }
@@ -58,10 +85,18 @@ namespace ShoeStoreManager
                 MessageBox.Show($"Загальна помилка: {ex.Message}", "Помилка", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
+        private void AuthMenuItem_Click(object sender, RoutedEventArgs e)
+        {
+            LoginForm authWindow = new LoginForm();
 
         private void MenuItem_Click(object sender, RoutedEventArgs e)
+>>>>>>>>> Temporary merge branch 2
         {
 
         }
     }
+<<<<<<<<< Temporary merge branch 1
 }
+=========
+}
+>>>>>>>>> Temporary merge branch 2
