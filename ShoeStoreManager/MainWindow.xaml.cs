@@ -60,3 +60,4 @@ namespace ShoeStoreManager
         }
     }
 }
+// лох їбучій
