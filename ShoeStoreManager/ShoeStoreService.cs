@@ -220,5 +220,54 @@ namespace ShoeStoreManager
             }
             return isDeleted;
         }
+
+        // Фільтрація товарів
+        public DataTable GetFilteredShoes(string nameFilter, int? minPrice, int? maxPrice, int categoryIndex)
+        {
+            MySqlConnection myConnection = new MySqlConnection(_connectionString);
+            myConnection.Open();
+
+            MySqlCommand myCommand = new MySqlCommand();
+            myCommand.Connection = myConnection;
+
+            string query = "SELECT * FROM shoe WHERE 1=1";
+
+            // ФІЛЬТР ЗА НАЗВОЮ
+            if (!string.IsNullOrWhiteSpace(nameFilter) && nameFilter != "Назва")
+            {
+                query += " AND name LIKE @name";
+                myCommand.Parameters.AddWithValue("@name", "%" + nameFilter + "%");
+            }
+
+            // Фільтр за ціною ВІД
+            if (minPrice.HasValue)
+            {
+                query += " AND price_one_pair >= @minPrice";
+                myCommand.Parameters.AddWithValue("@minPrice", minPrice.Value);
+            }
+
+            // Фільтр за ціною ДО
+            if (maxPrice.HasValue)
+            {
+                query += " AND price_one_pair <= @maxPrice";
+                myCommand.Parameters.AddWithValue("@maxPrice", maxPrice.Value);
+            }
+
+            // Фільтр за категорією
+            if (categoryIndex == 1) query += " AND item_number LIKE 'П%'";
+            else if (categoryIndex == 2) query += " AND item_number LIKE 'Д%'";
+            else if (categoryIndex == 3) query += " AND item_number LIKE 'Ч%'";
+
+            myCommand.CommandText = query;
+
+            MySqlDataAdapter myAdapter = new MySqlDataAdapter(myCommand);
+            DataTable dataTable = new DataTable();
+
+            myAdapter.Fill(dataTable);
+            myConnection.Close();
+
+            return dataTable;
+        }
+
     }
 }

@@ -20,44 +20,53 @@
             <MenuItem Header="Файл" Width="200" HorizontalContentAlignment="Center">
                 <MenuItem Header="Зберегти та Завантажити файл" />
             </MenuItem>
-
             <MenuItem Header="Товари" Width="375" HorizontalContentAlignment="Center">
                 <MenuItem Header="За артикулом" />
                 <MenuItem Header="За назвою" />
             </MenuItem>
-
             <MenuItem Header="Авторизація" Width="200" HorizontalContentAlignment="Center" Click="AuthMenuItem_Click"/>
         </Menu>
 
         <Grid Margin="0,28,0,0" Grid.RowSpan="2">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="82.4"/>
-                <ColumnDefinition Width="167.6"/>
+                <ColumnDefinition Width="250"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
 
-            <Border Grid.Column="0" Margin="10,48,10,0" Background="#9CB6D9" CornerRadius="8" VerticalAlignment="Top" Grid.ColumnSpan="2">
+            <Border Grid.Column="0" Margin="10,10,10,10" Background="#9CB6D9" CornerRadius="8" VerticalAlignment="Top">
                 <StackPanel>
                     <Border BorderBrush="#7A98C4" BorderThickness="0,0,0,2" Padding="10">
                         <TextBlock Text="Параметри відбору" FontWeight="Bold" FontSize="14" HorizontalAlignment="Center" Foreground="#1D2A3A"/>
                     </Border>
 
                     <StackPanel Margin="25,20,25,20">
+                        <TextBox x:Name="SearchNameTextBox" Text="Назва" Height="28" Margin="0,0,0,15" 
+         VerticalContentAlignment="Center" HorizontalContentAlignment="Center"
+         GotFocus="TextBox_GotFocus" LostFocus="TextBox_LostFocus"/>
 
-                        <TextBox Text="Назва" Height="28" Margin="0,0,0,15" 
-                                 VerticalContentAlignment="Center" HorizontalContentAlignment="Center"/>
+                        <Grid Margin="0,0,0,15">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="10"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBox x:Name="MinPriceTextBox" Grid.Column="0" Text="Ціна від" Height="28" 
+             VerticalContentAlignment="Center" HorizontalContentAlignment="Center"
+             GotFocus="TextBox_GotFocus" LostFocus="TextBox_LostFocus"/>
+                            <TextBox x:Name="MaxPriceTextBox" Grid.Column="2" Text="Ціна до" Height="28" 
+             VerticalContentAlignment="Center" HorizontalContentAlignment="Center"
+             GotFocus="TextBox_GotFocus" LostFocus="TextBox_LostFocus"/>
+                        </Grid>
 
-                        <TextBox Text="Знайти вартість" Height="28" Margin="0,0,0,15" 
-                                 VerticalContentAlignment="Center" HorizontalContentAlignment="Center"/>
-
-                        <ComboBox Height="28" Margin="0,0,0,25" SelectedIndex="1" 
+                        <ComboBox x:Name="CategoryComboBox" Height="28" Margin="0,0,0,25" SelectedIndex="0" 
                                   VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Background="White">
+                            <ComboBoxItem Content="Всі категорії"/>
                             <ComboBoxItem Content="Дитяче (П*)"/>
                             <ComboBoxItem Content="Дамське (Д*)"/>
                             <ComboBoxItem Content="Чоловіче (Ч*)"/>
                         </ComboBox>
 
-                        <Button Content="Вибрати" Height="32" Margin="0,0,0,10" 
+                        <Button x:Name="SelectBtn" Click="SelectBtn_Click" Content="Вибрати" Height="32" Margin="0,0,0,10" 
                                 Background="#00478E" Foreground="White" FontWeight="Bold">
                             <Button.Resources>
                                 <Style TargetType="Border">
@@ -66,7 +75,7 @@
                             </Button.Resources>
                         </Button>
 
-                        <Button Content="Зберегти" Height="32" 
+                        <Button x:Name="SaveSelBtn" Content="Зберегти" Height="32" 
                                 Background="#00478E" Foreground="White" FontWeight="Bold">
                             <Button.Resources>
                                 <Style TargetType="Border">
@@ -74,14 +83,13 @@
                                 </Style>
                             </Button.Resources>
                         </Button>
-
                     </StackPanel>
                 </StackPanel>
             </Border>
 
-            <DataGrid x:Name="ShoesDataGrid" Grid.Column="2" Margin="10,10,10,10" AutoGenerateColumns="False" 
+            <DataGrid x:Name="ShoesDataGrid" Grid.Column="1" Margin="10,10,10,10" AutoGenerateColumns="False" 
                       Background="White" RowBackground="White" AlternatingRowBackground="#F0F5FA" 
-                      HeadersVisibility="Column" BorderBrush="#9CB6D9" BorderThickness="1" IsReadOnly="True">
+                      HeadersVisibility="Column" BorderBrush="#9CB6D9" BorderThickness="1">
                 <DataGrid.Columns>
                     <DataGridTextColumn Header="Артикул" Width="100" Binding="{Binding item_number}"/>
                     <DataGridTextColumn Header="Назва моделі" Width="*" Binding="{Binding name}"/>
