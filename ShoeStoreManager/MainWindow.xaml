@@ -33,7 +33,7 @@
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
 
-            <Border Grid.Column="0" Margin="10,10,10,10" Background="#9CB6D9" CornerRadius="8" VerticalAlignment="Top">
+            <Border Grid.Column="0" Margin="10,48,10,0" Background="#9CB6D9" CornerRadius="8" VerticalAlignment="Top" >
                 <StackPanel>
                     <Border BorderBrush="#7A98C4" BorderThickness="0,0,0,2" Padding="10">
                         <TextBlock Text="Параметри відбору" FontWeight="Bold" FontSize="14" HorizontalAlignment="Center" Foreground="#1D2A3A"/>
@@ -89,7 +89,7 @@
 
             <DataGrid x:Name="ShoesDataGrid" Grid.Column="1" Margin="10,10,10,10" AutoGenerateColumns="False" 
                       Background="White" RowBackground="White" AlternatingRowBackground="#F0F5FA" 
-                      HeadersVisibility="Column" BorderBrush="#9CB6D9" BorderThickness="1">
+                      HeadersVisibility="Column" BorderBrush="#9CB6D9" BorderThickness="1" IsReadOnly="True">
                 <DataGrid.Columns>
                     <DataGridTextColumn Header="Артикул" Width="100" Binding="{Binding item_number}"/>
                     <DataGridTextColumn Header="Назва моделі" Width="*" Binding="{Binding name}"/>
