@@ -1,5 +1,6 @@
 ﻿using MySql.Data.MySqlClient;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Data;
 using System.Globalization;
@@ -115,7 +116,43 @@ namespace ShoeStoreManager
 
         private void DeleteMenuItem_Click(object sender, RoutedEventArgs e)
         {
- 
+            try
+            {
+                //Обов'язково перевіряємо, чи вибрано рядок в таблиці
+                if (!(ShoesDataGrid.SelectedItem is DataRowView selectedRow))
+                {
+                    MessageBox.Show("Будь ласка, спочатку виберіть модель зі списку для видалення.", "Увага", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    return;
+                }
+
+                //Створюємо об'єкт для видалення
+                Shoe shoe_for_deletion = new Shoe(
+                    selectedRow["item_number"].ToString(),
+                    selectedRow["name"].ToString(),
+                    Convert.ToInt32(selectedRow["count"]),
+                    Convert.ToDecimal(selectedRow["price_one_pair"]));
+
+                // Запит підтвердження
+                MessageBoxResult result = MessageBox.Show($"Ви дійсно хочете видалити модель {shoe_for_deletion.Name} (Артикул: {shoe_for_deletion.Article})?", "Підтвердження видалення", MessageBoxButton.YesNo, MessageBoxImage.Question);
+
+                if (result == MessageBoxResult.Yes)
+                {
+                    bool isDeleted = _storeService.DeleteShoe(shoe_for_deletion);
+                    if (isDeleted)
+                    {
+                        //Оновлюємо DataGrid
+                        ShoesDataGrid.ItemsSource = _storeService.GetAllShoes().DefaultView;
+                        //Очищаємо текстові поля, щоб там не залишалися старі дані
+                       ClearInputFields();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Помилка при видаленні: {ex.Message}", "Помилка", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+
+
         }
 
         private void LoadSelectedDataToEditor()
@@ -143,6 +180,5 @@ namespace ShoeStoreManager
             txtPrice.Clear();
             txtArticle.Focus();
         }
-
     }
 }

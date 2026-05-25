@@ -20,8 +20,9 @@
             </MenuItem>
 
             <MenuItem Header="Модель" Width="401" HorizontalContentAlignment="Center">
-                <MenuItem Header="Додати модель" />
-                <MenuItem Header="Редагувати модель" />
+                <MenuItem Header="Додати модель" Click="AddMenuItem_Click"/>
+                <MenuItem Header="Редагувати модель" Click="EditMenuItem_Click" />
+                <MenuItem Header="Видалити модель" Click="DeleteMenuItem_Click" />
             </MenuItem>
 
             <MenuItem Header="Вихід" Width="180" HorizontalContentAlignment="Center" Click="BackToMain_Click"/>
@@ -36,7 +37,7 @@
 
             <DataGrid x:Name="ShoesDataGrid" Grid.Column="0" AutoGenerateColumns="False" 
                       Background="White" RowBackground="White" AlternatingRowBackground="#F0F5FA" 
-                      HeadersVisibility="Column" BorderBrush="#9CB6D9" BorderThickness="1">
+                      HeadersVisibility="Column" BorderBrush="#9CB6D9" BorderThickness="1" IsReadOnly="True">
 
                 <DataGrid.ContextMenu>
                     <ContextMenu>

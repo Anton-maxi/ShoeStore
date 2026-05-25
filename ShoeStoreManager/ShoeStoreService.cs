@@ -72,6 +72,13 @@ namespace ShoeStoreManager
             Count = count;
             Price = price;
         }
+        public Shoe()
+        {
+            Article = "";
+            Name = "";
+            Count = 0;
+            Price = 0;
+        }
     }
 
     public class ShoeStoreService
@@ -185,7 +192,7 @@ namespace ShoeStoreManager
                 myConnection.Open();
                 using (MySqlCommand myCommand = new MySqlCommand(query, myConnection))
                 {
-                    if (parameters != null)
+                    if (parameters != null )
                     {
                         myCommand.Parameters.AddRange(parameters);
                     }
@@ -195,7 +202,23 @@ namespace ShoeStoreManager
                 }
             }
         }
+        public bool DeleteShoe(Shoe shoe)
+        {
+            string sql = "DELETE FROM shoe WHERE item_number = @article";
 
-    
+            // Створюємо масив тільки з одним параметром, який дійсно потрібен запиту
+            MySqlParameter[] parameters = new MySqlParameter[]
+            {
+                new MySqlParameter("@article", shoe.Article),
+            };
+
+            bool isDeleted = ExecuteDatabaseOperation(sql, parameters);
+
+            if (isDeleted)
+            {
+                MessageBox.Show("Модель успішно видалено!", "Успіх", MessageBoxButton.OK, MessageBoxImage.Information);
+            }
+            return isDeleted;
+        }
     }
 }
