@@ -18,11 +18,11 @@
 
         <Menu Grid.Row="0" Background="#C1D1E8" Padding="0,5,0,5" Margin="0,0,0,36">
             <MenuItem Header="Файл" Width="200" HorizontalContentAlignment="Center">
-                <MenuItem Header="Зберегти та Завантажити файл" />
+                <MenuItem Header="Зберегти та Завантажити файл" Click="SaveSelBtn_Click" />
             </MenuItem>
             <MenuItem Header="Товари" Width="375" HorizontalContentAlignment="Center">
-                <MenuItem Header="За артикулом" />
-                <MenuItem Header="За назвою" />
+                <MenuItem Header="За назвою" Click="FocusName_Click" />
+                <MenuItem Header="За артикулом" Click="FocusCategory_Click" />
             </MenuItem>
             <MenuItem Header="Авторизація" Width="200" HorizontalContentAlignment="Center" Click="AuthMenuItem_Click"/>
         </Menu>
@@ -75,7 +75,7 @@
                             </Button.Resources>
                         </Button>
 
-                        <Button x:Name="SaveSelBtn" Content="Зберегти" Height="32" 
+                        <Button x:Name="SaveSelBtn" Click="SaveSelBtn_Click" Content="Зберегти" Height="32 " 
                                 Background="#00478E" Foreground="White" FontWeight="Bold">
                             <Button.Resources>
                                 <Style TargetType="Border">

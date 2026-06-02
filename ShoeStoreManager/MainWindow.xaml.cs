@@ -1,6 +1,6 @@
 ﻿using MySql.Data.MySqlClient;
 using System;
-using System.Data; //Обов'язково для роботи з DataTable
+using System.Data;
 using System.Windows;
 using System.Windows.Controls;
 
@@ -32,30 +32,26 @@ namespace ShoeStoreManager
         {
             LoginForm authWindow = new LoginForm();
 
-            //Якщо авторизація пройшла успішно (ввели правильний логін і пароль)
+            //Якщо авторизація пройшла успішно
             if (authWindow.ShowDialog() == true)
             {
-                //Створюємо нове вікно Shoes
                 Shoes shoesWindow = new Shoes();
-
-                //Відкриваємо його
                 shoesWindow.Show();
 
-                //Закриваємо поточне вікно (MainWindow), щоб воно не висіло на фоні
                 this.Close();
             }
         }
 
         private void SelectBtn_Click(object sender, RoutedEventArgs e)
         {
-            // 1. Зчитуємо назву (якщо там висить підказка "Назва", передаємо порожній рядок)
+            //  Зчитуємо назву
             string searchName = "";
             if (SearchNameTextBox.Text != "Назва")
             {
                 searchName = SearchNameTextBox.Text.Trim();
             }
 
-            // 2. Безпечно зчитуємо мінімальну ціну
+            //  Безпечно зчитуємо мінімальну ціну
             int? minPrice = null;
             if (MinPriceTextBox.Text != "Ціна від" && int.TryParse(MinPriceTextBox.Text, out int parsedMin))
             {
@@ -68,15 +64,12 @@ namespace ShoeStoreManager
                 maxPrice = parsedMax;
             }
 
-            // Отримуємо індекс категорії з випадаючого списку
             int selectedCategoryIndex = CategoryComboBox.SelectedIndex;
 
             try
             {
-                // Викликаємо метод сервісу для відбору даних
                 DataTable filteredShoes = _storeService.GetFilteredShoes(searchName, minPrice, maxPrice, selectedCategoryIndex);
 
-                // Оновлюємо таблицю на екрані
                 ShoesDataGrid.ItemsSource = filteredShoes.DefaultView;
             }
             catch (Exception ex)
@@ -91,7 +84,6 @@ namespace ShoeStoreManager
             TextBox? textBox = sender as TextBox;
             if (textBox != null)
             {
-                // Якщо текст у полі співпадає з підказкою, очищаємо його
                 if (textBox.Text == "Назва" || textBox.Text == "Ціна від" || textBox.Text == "Ціна до")
                 {
                     textBox.Text = "";
@@ -105,7 +97,6 @@ namespace ShoeStoreManager
             TextBox? textBox = sender as TextBox;
             if (textBox != null)
             {
-                // Якщо користувач нічого не ввів, повертаємо підказку залежно від імені поля
                 if (string.IsNullOrWhiteSpace(textBox.Text))
                 {
                     if (textBox.Name == "SearchNameTextBox")
@@ -115,6 +106,59 @@ namespace ShoeStoreManager
                     else if (textBox.Name == "MaxPriceTextBox")
                         textBox.Text = "Ціна до";
                 }
+            }
+        }
+
+        private void FocusCategory_Click(object sender, RoutedEventArgs e)
+        {
+            // Переводимо фокус на випадаючий список
+            CategoryComboBox.Focus();
+
+            // Автоматично розгортаємо його
+            CategoryComboBox.IsDropDownOpen = true;
+        }
+
+        private void FocusName_Click(object sender, RoutedEventArgs e)
+        {
+            // Переводимо фокус на текстове поле пошуку за назвою
+            SearchNameTextBox.Focus();
+        }
+
+        private void SaveSelBtn_Click(object sender, RoutedEventArgs e)
+        {
+            if (ShoesDataGrid.ItemsSource is DataView dataView)
+            {
+                DataTable filteredTable = dataView.ToTable();
+
+                if (filteredTable.Rows.Count == 0)
+                {
+                    MessageBox.Show("Немає даних для збереження! Спочатку виберіть товари.", "Увага", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    return;
+                }
+
+                // Зчитуємо назву
+                string searchName = SearchNameTextBox.Text;
+
+                // Безпечно зчитуємо мінімальну ціну
+                int? minPrice = null;
+                if (MinPriceTextBox.Text != "Ціна від" && int.TryParse(MinPriceTextBox.Text, out int parsedMin))
+                {
+                    minPrice = parsedMin;
+                }
+
+                // Безпечно зчитуємо максимальну ціну
+                int? maxPrice = null;
+                if (MaxPriceTextBox.Text != "Ціна до" && int.TryParse(MaxPriceTextBox.Text, out int parsedMax))
+                {
+                    maxPrice = parsedMax;
+                }
+
+                // Зчитуємо категорію
+                string selectedCategory = CategoryComboBox.Text;
+
+                // Викликаємо експорт з усіма параметрами
+                WordExportService exportService = new WordExportService();
+                exportService.WriteData(filteredTable, searchName, minPrice, maxPrice, selectedCategory);
             }
         }
     }
