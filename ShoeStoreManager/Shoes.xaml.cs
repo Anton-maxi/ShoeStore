@@ -180,5 +180,23 @@ namespace ShoeStoreManager
             txtPrice.Clear();
             txtArticle.Focus();
         }
+        private void SaveSelBtn_Click(object sender, RoutedEventArgs e)
+        {
+            if (ShoesDataGrid.ItemsSource is DataView dataView)
+            {
+                DataTable filteredTable = dataView.ToTable();
+
+                if (filteredTable.Rows.Count == 0)
+                {
+                    MessageBox.Show("Немає даних для збереження!", "Увага", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    return;
+                }
+
+                // Викликаємо експорт з усіма параметрами
+                WordExportService exportService = new WordExportService();
+                exportService.WriteData(filteredTable, null, null, null, null);
+            }
+        }
     }
+
 }

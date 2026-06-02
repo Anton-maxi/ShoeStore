@@ -9,8 +9,8 @@ namespace ShoeStoreManager
 {
     public class WordExportService
     {
-        private Word.Application wordApp;
-        private Word.Document wordDoc;
+        private Word.Application? wordApp;
+        private Word.Document? wordDoc;
         private readonly string filePath;
 
         public WordExportService()
@@ -20,6 +20,11 @@ namespace ShoeStoreManager
 
         private void ReplaceText(string findText, string replaceText)
         {
+            if (wordApp == null)
+            {
+                throw new InvalidOperationException("Word application is not initialized.");
+            }
+
             Word.Find findObject = wordApp.Selection.Find;
             findObject.ClearFormatting();
             findObject.Text = findText;
@@ -34,7 +39,7 @@ namespace ShoeStoreManager
                 ref replaceAll, ref missing, ref missing, ref missing, ref missing);
         }
 
-        public void WriteData(DataTable shoesData, string searchName, int? minPrice, int? maxPrice, string categoryName)
+        public void WriteData(DataTable shoesData, string? searchName, int? minPrice, int? maxPrice, string? categoryName)
         {
             string templatePath = Path.Combine(filePath, "ReportTemplate.docx");
 
