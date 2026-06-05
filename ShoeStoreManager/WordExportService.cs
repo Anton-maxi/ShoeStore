@@ -41,7 +41,7 @@ namespace ShoeStoreManager
 
         public void WriteData(DataTable shoesData, string? searchName, int? minPrice, int? maxPrice, string? categoryName)
         {
-            string templatePath = Path.Combine(filePath, "ReportTemplate.docx");
+            string templatePath = Path.Combine(filePath, "ReportTemplate.dot");
 
             string userProfile = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
             string downloadsPath = Path.Combine(userProfile, "Downloads");

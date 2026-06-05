@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ShoeStoreManager", "ShoeSto
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ShoeStoreManagerTests", "ShoeStoreManagerTests\ShoeStoreManagerTests.csproj", "{3CA853B3-2D47-41C8-8ED7-F05257084D2C}"
 EndProject
+Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "ShoeStore", "ShoeStore\ShoeStore.vdproj", "{BAD0C5C4-B428-8022-0B9D-9D87FE1FEB91}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,8 @@ Global
 		{3CA853B3-2D47-41C8-8ED7-F05257084D2C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3CA853B3-2D47-41C8-8ED7-F05257084D2C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3CA853B3-2D47-41C8-8ED7-F05257084D2C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BAD0C5C4-B428-8022-0B9D-9D87FE1FEB91}.Debug|Any CPU.ActiveCfg = Debug
+		{BAD0C5C4-B428-8022-0B9D-9D87FE1FEB91}.Release|Any CPU.ActiveCfg = Release
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
